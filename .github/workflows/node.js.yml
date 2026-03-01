@@ -34,27 +34,19 @@ jobs:
     runs-on: Agent-2
     needs: compile
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Clean temp directory
-        run: |
+      - uses: actions/checkout@v4
+      - run: |
           sudo rm -rf /tmp/gitleaks*
           sudo rm -f /tmp/gitleaks.tmp
-
-      - name: Run Gitleaks Scan
-        uses: gitleaks/gitleaks-action@v2
+      - uses: gitleaks/gitleaks-action@v2
 
 
   trivy_scan:
     runs-on: Agent-2
     needs: gitleaks
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Run Trivy Filesystem Scan
-        uses: aquasecurity/trivy-action@0.20.0
+      - uses: actions/checkout@v4
+      - uses: aquasecurity/trivy-action@0.20.0
         with:
           scan-type: fs
           scan-ref: .
@@ -67,11 +59,8 @@ jobs:
     runs-on: Sonarqube
     needs: trivy_scan
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: SonarQube Scan (Frontend)
-        uses: SonarSource/sonarqube-scan-action@v2
+      - uses: actions/checkout@v4
+      - uses: SonarSource/sonarqube-scan-action@v2
         with:
           projectBaseDir: client
           args: >
@@ -88,11 +77,8 @@ jobs:
     runs-on: Sonarqube
     needs: sonar_frontend
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: SonarQube Scan (Backend)
-        uses: SonarSource/sonarqube-scan-action@v2
+      - uses: actions/checkout@v4
+      - uses: SonarSource/sonarqube-scan-action@v2
         with:
           projectBaseDir: api
           args: >
@@ -102,33 +88,21 @@ jobs:
             -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/build/**
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
 
-
-    build_frontend_docker_image_and_push:
+  build_frontend_docker_image_and_push:
     runs-on: ubuntu-latest
     needs: sonar_backend
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and Push Docker image
-        uses: docker/build-push-action@v6
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
         with:
           context: ./client
           file: ./client/Dockerfile
@@ -136,28 +110,18 @@ jobs:
           tags: ${{ vars.DOCKERHUB_USERNAME }}/frontend:latest
 
 
-    build_backend_docker_image_and_push:
+  build_backend_docker_image_and_push:
     runs-on: ubuntu-latest
     needs: build_frontend_docker_image_and_push
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and Push Docker image
-        uses: docker/build-push-action@v6
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
         with:
           context: ./api
           file: ./api/Dockerfile
