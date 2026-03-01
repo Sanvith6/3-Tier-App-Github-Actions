@@ -62,10 +62,10 @@ jobs:
           vuln-type: library
           severity: HIGH,CRITICAL
 
-    sonar_frontend:
+
+  sonar_frontend:
     runs-on: Agent-1
     needs: trivy_scan
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -83,10 +83,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-    sonar_backend:
+
+  sonar_backend:
     runs-on: Agent-1
     needs: sonar_frontend
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
