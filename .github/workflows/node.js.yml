@@ -9,7 +9,7 @@ on:
 jobs: 
 
   compile:
-    runs-on: Agent-1
+    runs-on: Agent-2
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
 
 
   gitleaks:
-    runs-on: Agent-1
+    runs-on: Agent-2
     needs: compile
     steps:
       - name: Checkout Code
@@ -47,7 +47,7 @@ jobs:
 
 
   trivy_scan:
-    runs-on: Agent-1
+    runs-on: Agent-2
     needs: gitleaks
     steps:
       - name: Checkout Code
@@ -64,7 +64,7 @@ jobs:
 
 
   sonar_frontend:
-    runs-on: Agent-1
+    runs-on: Agent-2
     needs: trivy_scan
     steps:
       - name: Checkout code
@@ -85,7 +85,7 @@ jobs:
 
 
   sonar_backend:
-    runs-on: Agent-1
+    runs-on: Agent-2
     needs: sonar_frontend
     steps:
       - name: Checkout code
