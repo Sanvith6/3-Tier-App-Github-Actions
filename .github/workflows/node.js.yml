@@ -33,18 +33,15 @@ jobs:
   gitleaks:
     runs-on: Agent-1
     needs: compile
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 🔴 IMPORTANT: clean temp files on self-hosted runner
       - name: Clean temp directory
         run: |
           sudo rm -rf /tmp/gitleaks*
           sudo rm -f /tmp/gitleaks.tmp
 
-      # ✅ Run gitleaks directly via action (NO manual CLI needed)
       - name: Run Gitleaks Scan
         uses: gitleaks/gitleaks-action@v2
 
@@ -52,7 +49,6 @@ jobs:
   trivy_scan:
     runs-on: Agent-1
     needs: gitleaks
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -60,8 +56,8 @@ jobs:
       - name: Run Trivy Filesystem Scan
         uses: aquasecurity/trivy-action@0.20.0
         with:
-            scan-type: fs
-            scan-ref: .
-            ignore-unfixed: true
-            vuln-type: library
-            severity: HIGH,CRITICAL
+          scan-type: fs
+          scan-ref: .
+          ignore-unfixed: true
+          vuln-type: library
+          severity: HIGH,CRITICAL
