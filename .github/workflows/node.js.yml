@@ -56,7 +56,7 @@ jobs:
 
 
   sonar_frontend:
-    runs-on: Sonarqube
+    runs-on: Agent-2
     needs: trivy_scan
     steps:
       - uses: actions/checkout@v4
@@ -74,7 +74,7 @@ jobs:
 
 
   sonar_backend:
-    runs-on: Sonarqube
+    runs-on: Agent-2
     needs: sonar_frontend
     steps:
       - uses: actions/checkout@v4
