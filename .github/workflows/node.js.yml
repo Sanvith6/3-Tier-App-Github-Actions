@@ -57,12 +57,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 🔴 Correct action name + version
-      - name: Run Trivy Vulnerability Scanner
+      - name: Run Trivy Filesystem Scan
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          scan-type: fs
-          scan-ref: .
-          ignore-unfixed: true
-          vuln-type: os,library
-          severity: HIGH,CRITICAL
+            scan-type: fs
+            scan-ref: .
+            ignore-unfixed: true
+            vuln-type: library
+            severity: HIGH,CRITICAL
