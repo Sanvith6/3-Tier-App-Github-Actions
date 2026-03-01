@@ -17,7 +17,7 @@ jobs:
    
     steps:
     - name: Checkout Code
-    - uses: actions/checkout@v4
+      uses: actions/checkout@v4
 
     
     - name: Use Node.js 
@@ -32,7 +32,7 @@ jobs:
           cd client
           find . -name "*.js" -exec node --check {} +
 
-    - name: Frontend Syntax Check
+    - name: Backend Syntax check
       run: |
           cd api
           find . -name "*.js" -exec node --check {} +
