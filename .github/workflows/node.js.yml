@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ "main" ]
 
-jobs:
+jobs: 
 
   compile:
     runs-on: Agent-1
