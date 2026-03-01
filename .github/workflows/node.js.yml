@@ -38,7 +38,7 @@ jobs:
           find . -name "*.js" -exec node --check {} +
   gitleaks:
    runs-on: Agent-1
-   needs: complie
+   needs: compile
 
    steps:
      - name: Checkout Code
